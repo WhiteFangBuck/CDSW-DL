@@ -15,8 +15,8 @@ for req in $(cat ../requirements.txt); do conda install -y $req; done
 pip install pydoop
 
 ##Install tensorflow
-conda install -c conda-forge tensorflow
+conda install -y -c conda-forge tensorflow
 
 ##Clean up
-#cd ..
-#rm -rf deleteme
+cd ..
+rm -rf deleteme

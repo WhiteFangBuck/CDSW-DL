@@ -78,7 +78,7 @@ cat /proc/driver/nvidia/version
 +   ./bin/x86_64/linux/release/bandwidthTest 
 
 #### Install the cudaNN
-#####Get the version 6.0 from here
+##### Get the version 6.0 from here
 https://developer.nvidia.com/cudnn
 ```Shell
    cudnn-7.5-linux-x64-v6.0.tgz
@@ -88,5 +88,9 @@ https://developer.nvidia.com/cudnn
    cp include/cudnn.h /usr/include/
 ```
 
-
+#### Make the libraries be available in the system path
+```Shell
+ echo "/usr/local/cuda >> /etc/ld.so.conf.d/cuda.conf"
+ ldconfig
+```
 

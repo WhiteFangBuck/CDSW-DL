@@ -57,5 +57,6 @@ mkdir cuda-samples \
 cd cuda-samples/NVIDIA_CUDA-7.5_Samples/ \
 make \
 ./bin/x86_64/linux/release/deviceQuery \
+![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic7.png)
 ./bin/x86_64/linux/release/bandwidthTest \
 

@@ -1,7 +1,7 @@
 #Get  the epel repo
 mkdir deleteme && cd deleteme && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
-yum install epel-release-latest-7.noarch.rpm && \
+yum install -y epel-release-latest-7.noarch.rpm && \
 cd .. && rm -rf deleteme
 
 #Prepare the system for Caffe

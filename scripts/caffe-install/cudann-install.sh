@@ -8,12 +8,19 @@ yum install -y epel-release-latest-7.noarch.rpm && \
 cd .. && rm -rf deleteme
 
 yum -y install git pciutils dkms kernel-devel kernel-headers gcc
+
+
+#confirm you have a CUDA capable GPU
+lspci | grep -i nvidia
+
+echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+
+reboot
 ### Search for your NVIDIA drivers
 ###MINE were http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/accelerated-computing-instances.html
 ### G2 Instances
 
-#confirm you have a CUDA capable GPU
-lspci | grep -i nvidia
 
 
 #Product Type	GRID
@@ -24,13 +31,6 @@ lspci | grep -i nvidia
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
 chmod 774 NVIDIA-Linux-x86_64-367.57.run
 ./NVIDIA-Linux-x86_64-367.57.run
-
-
-echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-echo "alias nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-echo "alias lbm-nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
 
 #curl http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run
 

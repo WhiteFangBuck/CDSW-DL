@@ -26,11 +26,11 @@ yum -y install git pciutils dkms kernel-devel-$(uname -r) kernel-headers-$(uname
 ### Search for your NVIDIA drivers
 ##### MINE were http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/accelerated-computing-instances.html
 ### G2 Instances
-#### Product Type	GRID
-#### Product Series	GRID Series
-#### Product	GRID K520
-#### Operating System	Linux 64-bit
-#### Recommended/Beta	Recommended/Certified
+#### + Product Type	GRID
+#### + Product Series	GRID Series
+#### + Product	GRID K520
+#### + Operating System	Linux 64-bit
+#### + Recommended/Beta	Recommended/Certified
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
 chmod 774 NVIDIA-Linux-x86_64-367.57.run
 ./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/${uname -r}/source

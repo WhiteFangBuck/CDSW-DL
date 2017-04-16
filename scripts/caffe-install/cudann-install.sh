@@ -2,6 +2,11 @@
 
 ### runtime
 
+mkdir deleteme && cd deleteme && \
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+yum install -y epel-release-latest-7.noarch.rpm && \
+cd .. && rm -rf deleteme
+
 yum -y install git pciutils dkms kernel-devel kernel-headers gcc
 ### Search for your NVIDIA drivers
 ###MINE were http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/accelerated-computing-instances.html

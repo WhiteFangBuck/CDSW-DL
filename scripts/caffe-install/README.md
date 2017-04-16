@@ -90,7 +90,7 @@ https://developer.nvidia.com/cudnn
 
 #### Make the libraries be available in the system path
 ```Shell
- echo "/usr/local/cuda >> /etc/ld.so.conf.d/cuda.conf"
+ echo "/usr/local/cuda/lib >> /etc/ld.so.conf.d/cuda.conf"
  ldconfig
 ```
 

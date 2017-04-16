@@ -63,14 +63,16 @@ cat /proc/driver/nvidia/version
 ![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic5.png)
 
 #### For CUDA Toolkit
-#### For CentOS/RHEL 7.2: 
-+   wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run 
-+   rpm -ivh cuda-repo-rhel7-7-5-local-7.5-18.x86_64.rpm 
-+   yum -y install cuda 
-+   mkdir cuda-samples 
-+   /usr/local/cuda-7.5/bin/cuda-install-samples-7.5.sh cuda-samples 
-+   cd cuda-samples/NVIDIA_CUDA-7.5_Samples/ 
-+   make 
+#### For CentOS/RHEL 7.2:
+```Shell
+  wget http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run 
+  rpm -ivh cuda-repo-rhel7-7-5-local-7.5-18.x86_64.rpm 
+  yum -y install cuda 
+  mkdir cuda-samples 
+  /usr/local/cuda-7.5/bin/cuda-install-samples-7.5.sh cuda-samples 
+  cd cuda-samples/NVIDIA_CUDA-7.5_Samples/ 
+  make 
+```
 +   ./bin/x86_64/linux/release/deviceQuery 
 +   ![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic7.png)
 +   ./bin/x86_64/linux/release/bandwidthTest 

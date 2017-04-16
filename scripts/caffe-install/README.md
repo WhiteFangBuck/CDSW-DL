@@ -1,23 +1,34 @@
 ### Preparing the GPU Node
 #### Verify You Have a CUDA-Capable GPU
+```Shell
 lspci | grep -i nvidia
+ ```
 
 #### Enable the epel repo
+```Shell
 mkdir deleteme && cd deleteme && \
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
 yum install -y epel-release-latest-7.noarch.rpm && \
 cd .. && rm -rf deleteme
+ ```
 
 #### Update the repo
+```Shell
 yum -y update
+ ```
 
 #### Get the latest kernel. Sometimes with older kernels the headers and devels do not match
+#### Install the headers
+```Shell
 yum install kernel \
 echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf \
 echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf \
+ ```
 
 #### reboot
+```Shell
 reboot 
+ ```
 
 #### Install the headers
 ```Shell
@@ -28,9 +39,10 @@ yum -y install \
     kernel-devel-$(uname -r) \
     kernel-headers-$(uname -r) \
     gcc gcc-c++
+    
+    ./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/$(uname -r)/source
  ```
 
-./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/$(uname -r)/source
 
 #### Search for your NVIDIA drivers
 ###### MINE were http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/accelerated-computing-instances.html

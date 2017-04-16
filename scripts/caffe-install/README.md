@@ -21,12 +21,12 @@ echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nou
 
 ### Install the headers
 yum -y install \
->  git \
->  pciutils \
->  dkms \
->  kernel-devel-$(uname -r) \
->  kernel-headers-$(uname -r) \
->  gcc gcc-c++
+    git \
+    pciutils \
+    dkms \
+    kernel-devel-$(uname -r) \
+    kernel-headers-$(uname -r) \
+    gcc gcc-c++
 
 ./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/$(uname -r)/source
 

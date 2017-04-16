@@ -45,6 +45,7 @@ chmod 774 NVIDIA-Linux-x86_64-367.57.run
 
 ### Check the installation
 cat /proc/driver/nvidia/version
+![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic5.png)
 
 ### For CUDA Toolkit
 ### For CentOS/RHEL 7.2: 

@@ -24,7 +24,21 @@ cd boost_1_61_0 && \
 bash ./bootstrap.sh && ./b2 install
 
 #install caffe in your home directory
-runuser -l vsingh -c 'git clone https://github.com/yahoo/CaffeOnSpark.git --recursive /home/vsingh/CaffeOnSpark'
-runuser -l vsingh -c 'echo CAFFE_ON_SPARK=/home/vsingh/CaffeOnSpark >> /home/vsingh/.bashrc'
-runuser -l vsingh -c 'cp /home/vsingh/CaffeOnSpark/caffe-public/Makefile.config.example /home/vsingh/CaffeOnSpark/caffe-public/Makefile.config'
-runuser -l vsingh -c 'echo "INCLUDE_DIRS += ${JAVA_HOME}/include" >> /home/vsingh/CaffeOnSpark/caffe-public/Makefile.config'
+if [ $# -eq 0 ]
+  then
+    echo "Please specify the user name"
+    exit
+fi
+
+
+if ! id -u $1 > /dev/null 2>&1; then
+    echo "The user $1 does not exist; creating one"
+    adduser $1
+fi
+
+
+#install caffe in your home directory
+runuser -l $1 -c "git clone https://github.com/yahoo/CaffeOnSpark.git --recursive /home/'$1'/CaffeOnSpark"
+runuser -l $1 -c "echo CAFFE_ON_SPARK=/home/'$1'/CaffeOnSpark >> /home/'$1'/.bashrc"
+runuser -l $1 -c "cp /home/'$1'/CaffeOnSpark/caffe-public/Makefile.config.example /home/'$1'/CaffeOnSpark/caffe-public/Makefile.config"
+runuser -l $1 -c "echo \"INCLUDE_DIRS += ${JAVA_HOME}/include\" >> /home/'$1'/CaffeOnSpark/caffe-public/Makefile.config"

@@ -13,9 +13,9 @@ cd .. && rm -rf deleteme
 yum -y update
 
 ### Get the latest kernel. Sometimes with older kernels the headers and devels do not match
-yum install kernel 
-echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+yum install kernel \
+echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf \
+echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf \
 
 #### reboot
 

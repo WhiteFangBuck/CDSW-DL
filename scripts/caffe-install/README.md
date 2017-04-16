@@ -59,3 +59,14 @@ cat /proc/driver/nvidia/version
 +   ![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic7.png)
 +   ./bin/x86_64/linux/release/bandwidthTest 
 
+#### Install the cudaNN
+#####Get the version 6.0 from here
+https://developer.nvidia.com/cudnn
++   cudnn-7.5-linux-x64-v6.0.tgz
++   tar -zxvf cudnn-7.5-linux-x64-v6.0.tgz
++   cd cuda
++   cp lib64/libcudnn\* /usr/lib64/
++   cp include/cudnn.h /usr/include/
+
+
+

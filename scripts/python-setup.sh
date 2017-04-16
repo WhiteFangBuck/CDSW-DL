@@ -28,8 +28,8 @@ conda create -y -n pycaffe
 source activate pycaffe
 conda install -y python=2.7.11
 
-##Make sure the protobuf version is 2.5.0
+##Make sure the protobuf is only the one installed with yum
 conda remove -y libprotobuf
-conda install -y libprotobuf=2.5.0
+conda install -y libprotobuf
 source deactivate pycaffe
 

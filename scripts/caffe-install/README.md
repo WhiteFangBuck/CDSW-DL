@@ -34,7 +34,7 @@ yum -y install git pciutils dkms kernel-devel-$(uname -r) kernel-headers-$(uname
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
 chmod 774 NVIDIA-Linux-x86_64-367.57.run
 ./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/${uname -r}/source
-![alt tag](
+![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/pic4.png)
 
 ### Check the installation
 cat /proc/driver/nvidia/version

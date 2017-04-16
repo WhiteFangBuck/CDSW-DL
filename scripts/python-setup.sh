@@ -17,6 +17,19 @@ conda install -y -c conda-forge tensorflow
 ##Make sure JAVA_HOME is set, or else this will fail
 pip install pydoop
 
+source deactivate py27
+
 ##Clean up
 cd ..
 rm -rf deleteme
+
+##Create an environment for Caffe
+conda create -y -n pycaffe
+source activate pycaffe
+conda install -y python=2.7.11
+
+##Make sure the protobuf version is 2.5.0
+conda remove -y libprotobuf
+conda install -y libprotobuf=2.5.0
+source deactivate pycaffe
+

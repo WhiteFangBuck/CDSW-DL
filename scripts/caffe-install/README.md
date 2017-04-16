@@ -80,11 +80,13 @@ cat /proc/driver/nvidia/version
 #### Install the cudaNN
 #####Get the version 6.0 from here
 https://developer.nvidia.com/cudnn
-+   cudnn-7.5-linux-x64-v6.0.tgz
-+   tar -zxvf cudnn-7.5-linux-x64-v6.0.tgz
-+   cd cuda
-+   cp lib64/libcudnn\* /usr/lib64/
-+   cp include/cudnn.h /usr/include/
+```Shell
+   cudnn-7.5-linux-x64-v6.0.tgz
+   tar -zxvf cudnn-7.5-linux-x64-v6.0.tgz
+   cd cuda
+   cp lib64/libcudnn\* /usr/lib64/
+   cp include/cudnn.h /usr/include/
+```
 
 
 

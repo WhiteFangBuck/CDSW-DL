@@ -41,7 +41,6 @@ yum -y install \
 wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
 chmod 774 NVIDIA-Linux-x86_64-367.57.run
 ./NVIDIA-Linux-x86_64-367.57.run --kernel-source-path /lib/modules/${uname -r}/source
-![alt tag](https://github.com/WhiteFangBuck/CDSW-DL/blob/master/scripts/caffe-install/images/Screen Shot 2017-04-16 at 12.01.25 AM.png)
 
 #### Check the installation
 cat /proc/driver/nvidia/version

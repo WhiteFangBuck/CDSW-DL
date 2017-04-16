@@ -26,11 +26,11 @@ chmod 774 NVIDIA-Linux-x86_64-367.57.run
 ./NVIDIA-Linux-x86_64-367.57.run
 
 
-#echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-#echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-#echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-#echo "alias nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
-#echo "alias lbm-nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "alias nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+echo "alias lbm-nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
 
 #curl http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run
 

@@ -2,11 +2,37 @@
 
 ### runtime
 
-NVIDIA_GPGKEY_SUM=bd841d59a27a406e513db7d405550894188a4c1cd96bf8aa4f82f1b39e0b5c1c
+yum -y install git pciutils dkms kernel-devel kernel-headers gcc
+### Search for your NVIDIA drivers
+###MINE were http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/accelerated-computing-instances.html
+### G2 Instances
+
+#confirm you have a CUDA capable GPU
+lspci | grep -i nvidia
+
+
+#Product Type	GRID
+#Product Series	GRID Series
+#Product	GRID K520
+#Operating System	Linux 64-bit
+#Recommended/Beta	Recommended/Certified
+wget http://us.download.nvidia.com/XFree86/Linux-x86_64/367.57/NVIDIA-Linux-x86_64-367.57.run
+chmod 774 NVIDIA-Linux-x86_64-367.57.run
+./NVIDIA-Linux-x86_64-367.57.run
+
+
+#echo "blacklist nouveau" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+#echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+#echo "options nouveau modeset=0" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+#echo "alias nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+#echo "alias lbm-nouveau off" >> /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+
+#curl http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run
+
 
 curl -fsSL http://developer.download.nvidia.com/compute/cuda/repos/GPGKEY \
  | sed '/^Version/d' > /etc/pki/rpm-gpg/RPM-GPG-KEY-NVIDIA
-echo "$NVIDIA_GPGKEY_SUM /etc/pki/rpm-gpg/RPM-GPG-KEY-NVIDIA" | sha256sum -c --strict -
+echo "$NVIDIA_GPGKEY_SUM /etc/pki/rpm-gpg/RPM-GPG-KEY-NVIDIA" 
 
 cp cuda.repo /etc/yum.repos.d/cuda.repo
 

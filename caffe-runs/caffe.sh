@@ -1,4 +1,8 @@
-spark2-submit --master yarn --deploy-mode client \
+export SPARK_HOME=/opt/cloudera/parcels/SPARK2/lib/spark2
+export PATH=$SPARK_HOME/bin:$PATH
+
+spark-submit \
+--master yarn --deploy-mode client \
 --num-executors 3 \
 --files ./lenet_memory_solver.prototxt,./lenet_memory_train_test.prototxt \
 --conf spark.driver.extraLibraryPath="${LD_LIBRARY_PATH}" \

@@ -7,7 +7,7 @@ lspci | grep -i nvidia
 #### Enable the epel repo
 ```Shell
 mkdir deleteme && cd deleteme && \
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm && \
+wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm && \
 yum install -y epel-release-latest-7.noarch.rpm && \
 cd .. && rm -rf deleteme
  ```

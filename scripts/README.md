@@ -8,7 +8,7 @@ lspci | grep -i nvidia
 ```Shell
 mkdir deleteme && cd deleteme && \
 wget http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-10.noarch.rpm && \
-yum install -y epel-release-latest-7.noarch.rpm && \
+yum install -y epel-release-7-10.noarch.rpm && \
 cd .. && rm -rf deleteme
  ```
 

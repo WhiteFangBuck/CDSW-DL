@@ -1,8 +1,8 @@
 mkdir deleteme
 cd deleteme
-wget https://repo.continuum.io/archive/Anaconda2-4.3.1-Linux-x86_64.sh
-chmod 755 Anaconda2-4.3.1-Linux-x86_64.sh
-bash Anaconda2-4.3.1-Linux-x86_64.sh -f -b -p /usr/anaconda
+wget https://repo.continuum.io/archive/Anaconda2-4.4.0-Linux-x86_64.sh
+chmod 755 Anaconda2-4.4.0-Linux-x86_64.sh
+bash Anaconda2-4.4.0-Linux-x86_64.sh -f -b -p /usr/anaconda
 echo "export PATH=/usr/anaconda/bin:\$PATH" >> ~/.bashrc
 source ~/.bashrc
 conda create -y -n py27

@@ -34,7 +34,7 @@ def run(experiment_fn, output_dir, schedule=None):
 
    * 'ps' maps to 'serve'
    * 'worker' maps to 'train'
-   * 'master' maps to 'local_run'
+   * 'main' maps to 'local_run'
 
   If the experiment's config does not include a task type, then an exception
   is raised.
@@ -130,7 +130,7 @@ def _get_default_schedule(config):
     raise ValueError('Must specify a schedule')
 
   if config.task_type == run_config.TaskType.MASTER:
-    # TODO(rhaertel): handle the case where there is more than one master
+    # TODO(rhaertel): handle the case where there is more than one main
     # or explicitly disallow such a case.
     return 'train_and_evaluate'
   elif config.task_type == run_config.TaskType.PS:

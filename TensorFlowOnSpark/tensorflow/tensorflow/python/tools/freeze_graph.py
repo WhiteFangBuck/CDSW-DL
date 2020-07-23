@@ -58,7 +58,7 @@ tf.app.flags.DEFINE_boolean("input_binary", False,
 tf.app.flags.DEFINE_string("output_node_names", "",
                            """The name of the output nodes, comma separated.""")
 tf.app.flags.DEFINE_string("restore_op_name", "save/restore_all",
-                           """The name of the master restore operator.""")
+                           """The name of the main restore operator.""")
 tf.app.flags.DEFINE_string("filename_tensor_name", "save/Const:0",
                            """The name of the tensor holding the save path.""")
 tf.app.flags.DEFINE_boolean("clear_devices", True,

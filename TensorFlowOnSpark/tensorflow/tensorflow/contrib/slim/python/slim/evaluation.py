@@ -81,7 +81,7 @@ more summaries and call the evaluation_loop method:
 
   # Evaluate every 10 minutes:
   slim.evaluation_loop(
-      master='',
+      main='',
       checkpoint_dir,
       logdir,
       num_evals=num_evals,
@@ -109,7 +109,7 @@ with only summaries. The user need only leave out the 'eval_op' argument:
 
   # Evaluate once every 10 minutes.
   slim.evaluation_loop(
-      master='',
+      main='',
       checkpoint_dir,
       logdir,
       num_evals=1,
@@ -282,7 +282,7 @@ def evaluation(sess,
 _USE_DEFAULT = 0
 
 
-def evaluate_once(master,
+def evaluate_once(main,
                   checkpoint_path,
                   logdir,
                   num_evals=1,
@@ -299,7 +299,7 @@ def evaluate_once(master,
   """Evaluates the model at the given checkpoint path.
 
   Args:
-    master: The BNS address of the TensorFlow master.
+    main: The BNS address of the TensorFlow main.
     checkpoint_path: The path to a checkpoint to use for evaluation.
     logdir: The directory where the TensorFlow summaries are written to.
     num_evals: The number of times to run `eval_op`.
@@ -344,7 +344,7 @@ def evaluate_once(master,
   logging.info('Starting evaluation at ' + time.strftime('%Y-%m-%d-%H:%M:%S',
                                                          time.gmtime()))
   with sv.managed_session(
-      master, start_standard_services=False, config=session_config) as sess:
+      main, start_standard_services=False, config=session_config) as sess:
     saver.restore(sess, checkpoint_path)
     sv.start_queue_runners(sess)
     final_op_value = evaluation(sess,
@@ -366,7 +366,7 @@ def evaluate_once(master,
   return final_op_value
 
 
-def evaluation_loop(master,
+def evaluation_loop(main,
                     checkpoint_dir,
                     logdir,
                     num_evals=1,
@@ -386,7 +386,7 @@ def evaluation_loop(master,
   """Runs TF-Slim's Evaluation Loop.
 
   Args:
-    master: The BNS address of the TensorFlow master.
+    main: The BNS address of the TensorFlow main.
     checkpoint_dir: The directory where checkpoints are stored.
     logdir: The directory where the TensorFlow summaries are written to.
     num_evals: The number of times to run `eval_op`.
@@ -440,7 +440,7 @@ def evaluation_loop(master,
                                                            time.gmtime()))
 
     with sv.managed_session(
-        master, start_standard_services=False, config=session_config) as sess:
+        main, start_standard_services=False, config=session_config) as sess:
       sv.saver.restore(sess, checkpoint_path)
       sv.start_queue_runners(sess)
       final_op_value = evaluation(sess,

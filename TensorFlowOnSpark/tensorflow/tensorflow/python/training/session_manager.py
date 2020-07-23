@@ -45,7 +45,7 @@ class SessionManager(object):
      ...add operations to the graph...
     # Create a SessionManager that will checkpoint the model in '/tmp/mydir'.
     sm = SessionManager()
-    sess = sm.prepare_session(master, init_op, saver, checkpoint_dir)
+    sess = sm.prepare_session(main, init_op, saver, checkpoint_dir)
     # Use the session to train the graph.
     while True:
       sess.run(<my_train_op>)
@@ -61,7 +61,7 @@ class SessionManager(object):
      ...add operations to the graph...
     # Create a SessionManager that will wait for the model to become ready.
     sm = SessionManager()
-    sess = sm.wait_for_session(master)
+    sess = sm.wait_for_session(main)
     # Use the session to train the graph.
     while True:
       sess.run(<my_train_op>)
@@ -128,7 +128,7 @@ class SessionManager(object):
                        ready_for_local_init_op)
 
   def _restore_checkpoint(self,
-                          master,
+                          main,
                           saver=None,
                           checkpoint_dir=None,
                           wait_for_checkpoint=False,
@@ -138,7 +138,7 @@ class SessionManager(object):
 
 
     Args:
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       saver: A `Saver` object used to restore a model.
       checkpoint_dir: Path to the checkpoint files.
       wait_for_checkpoint: Whether to wait for checkpoint to become available.
@@ -149,7 +149,7 @@ class SessionManager(object):
       A pair (sess, is_restored) where 'is_restored' is `True` if
       the session could be restored, `False` otherwise.
     """
-    self._target = master
+    self._target = main
     sess = session.Session(self._target, graph=self._graph, config=config)
 
     # If either saver or checkpoint_dir is not specified, cannot restore. Just
@@ -174,13 +174,13 @@ class SessionManager(object):
     saver.recover_last_checkpoints(ckpt.all_model_checkpoint_paths)
     return sess, True
 
-  def prepare_session(self, master, init_op=None, saver=None,
+  def prepare_session(self, main, init_op=None, saver=None,
                       checkpoint_dir=None, wait_for_checkpoint=False,
                       max_wait_secs=7200, config=None, init_feed_dict=None,
                       init_fn=None):
     """Creates a `Session`. Makes sure the model is ready to be used.
 
-    Creates a `Session` on 'master'. If a `saver` object is passed in, and
+    Creates a `Session` on 'main'. If a `saver` object is passed in, and
     `checkpoint_dir` points to a directory containing valid checkpoint
     files, then it will try to recover the model from checkpoint. If
     no checkpoint files are available, and `wait_for_checkpoint` is
@@ -197,7 +197,7 @@ class SessionManager(object):
     or `init_fn` or `local_init_op` are passed.
 
     Args:
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       init_op: Optional `Operation` used to initialize the model.
       saver: A `Saver` object used to restore a model.
       checkpoint_dir: Path to the checkpoint files.
@@ -219,7 +219,7 @@ class SessionManager(object):
     """
 
     sess, is_loaded_from_checkpoint = self._restore_checkpoint(
-        master,
+        main,
         saver,
         checkpoint_dir=checkpoint_dir,
         wait_for_checkpoint=wait_for_checkpoint,
@@ -252,7 +252,7 @@ class SessionManager(object):
     return sess
 
   def recover_session(self,
-                      master,
+                      main,
                       saver=None,
                       checkpoint_dir=None,
                       wait_for_checkpoint=False,
@@ -260,11 +260,11 @@ class SessionManager(object):
                       config=None):
     """Creates a `Session`, recovering if possible.
 
-    Creates a new session on 'master'.  If the session is not initialized
+    Creates a new session on 'main'.  If the session is not initialized
     and can be recovered from a checkpoint, recover it.
 
     Args:
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       saver: A `Saver` object used to restore a model.
       checkpoint_dir: Path to the checkpoint files.
       wait_for_checkpoint: Whether to wait for checkpoint to become available.
@@ -277,7 +277,7 @@ class SessionManager(object):
     """
 
     sess, is_loaded_from_checkpoint = self._restore_checkpoint(
-        master,
+        main,
         saver,
         checkpoint_dir=checkpoint_dir,
         wait_for_checkpoint=wait_for_checkpoint,
@@ -306,10 +306,10 @@ class SessionManager(object):
     logging.info("Restored model from %s", checkpoint_dir)
     return sess, is_loaded_from_checkpoint
 
-  def wait_for_session(self, master, config=None, max_wait_secs=float("Inf")):
+  def wait_for_session(self, main, config=None, max_wait_secs=float("Inf")):
     """Creates a new `Session` and waits for model to be ready.
 
-    Creates a new `Session` on 'master'.  Waits for the model to be
+    Creates a new `Session` on 'main'.  Waits for the model to be
     initialized or recovered from a checkpoint.  It's expected that
     another thread or process will make the model ready, and that this
     is intended to be used by threads/processes that participate in a
@@ -320,7 +320,7 @@ class SessionManager(object):
     by max_wait_secs. By default, this function will wait indefinitely.
 
     Args:
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       config: Optional ConfigProto proto used to configure the session.
       max_wait_secs: Maximum time to wait for the session to become available.
 
@@ -332,7 +332,7 @@ class SessionManager(object):
       tf.DeadlineExceededError: if the session is not available after
         max_wait_secs.
     """
-    self._target = master
+    self._target = main
 
     if max_wait_secs is None:
       max_wait_secs = float("Inf")

@@ -1224,7 +1224,7 @@ class Session(BaseSession):
 
     NOTE:
     (i) reset() is currently only implemented for distributed sessions.
-    (ii) Any sessions on the master named by `target` will be closed.
+    (ii) Any sessions on the main named by `target` will be closed.
 
     If no resource containers are provided, all containers are reset.
 

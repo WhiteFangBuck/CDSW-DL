@@ -5,7 +5,7 @@ from operator import add
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder\
-  .master("yarn")\
+  .main("yarn")\
   .config("spark.deploy.mode","client")\
   .config("spark.driver.cores","2")\
   .config("spark.driver.memory","2g")\
@@ -20,19 +20,19 @@ spark = SparkSession.builder\
   .config("spark.shuffle.blockTransferService","nio")\
   .config("spark.scheduler.minRegisteredResourcesRatio","1.0")\
   .config("spark.driver.extraClassPath","/home/cdsw/BigDL/dist/lib/bigdl-0.2.0-SNAPSHOT-jar-with-dependencies.jar")\
-  .config("spark.yarn.appMasterEnv.PYSPARK_PYTHON","/usr/anaconda2/envs/py27/bin/python")\
-  .config("spark.yarn.appMasterEnv.PYSPARK_DRIVER_PYTHON","/usr/anaconda2/envs/py27/bin/python")\
+  .config("spark.yarn.appMainEnv.PYSPARK_PYTHON","/usr/anaconda2/envs/py27/bin/python")\
+  .config("spark.yarn.appMainEnv.PYSPARK_DRIVER_PYTHON","/usr/anaconda2/envs/py27/bin/python")\
   .config("spark.executor.extraClassPath","/home/cdsw/BigDL/dist/lib/bigdl-0.2.0-SNAPSHOT-jar-with-dependencies.jar")\
   .config("spark.executorEnv.DL_ENGINE_TYPE","mklblas")\
   .config("spark.executorEnv.MKL_DISABLE_FAST_MM","1")\
   .config("spark.executorEnv.KMP_BLOCKTIME","0")\
   .config("spark.executorEnv.OMP_WAIT_POLICY","passive")\
   .config("spark.executorEnv.OMP_NUM_THREADS","1")\
-  .config("spark.yarn.appMasterEnv.DL_ENGINE_TYPE","mklblas")\
-  .config("spark.yarn.appMasterEnv.MKL_DISABLE_FAST_MM","1")\
-  .config("spark.yarn.appMasterEnv.KMP_BLOCKTIME","0")\
-  .config("spark.yarn.appMasterEnv.OMP_WAIT_POLICY","passive")\
-  .config("spark.yarn.appMasterEnv.OMP_NUM_THREADS","1")\
+  .config("spark.yarn.appMainEnv.DL_ENGINE_TYPE","mklblas")\
+  .config("spark.yarn.appMainEnv.MKL_DISABLE_FAST_MM","1")\
+  .config("spark.yarn.appMainEnv.KMP_BLOCKTIME","0")\
+  .config("spark.yarn.appMainEnv.OMP_WAIT_POLICY","passive")\
+  .config("spark.yarn.appMainEnv.OMP_NUM_THREADS","1")\
   .getOrCreate()
   
 sc=spark.sparkContext  

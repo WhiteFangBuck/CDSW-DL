@@ -36,7 +36,7 @@ class Environment(object):
 
 
 class TaskType(object):
-  MASTER = 'master'
+  MASTER = 'main'
   PS = 'ps'
   WORKER = 'worker'
 
@@ -48,10 +48,10 @@ class ClusterConfig(object):
   RunConfig instead.
   """
 
-  def __init__(self, master=None, evaluation_master=None):
+  def __init__(self, main=None, evaluation_main=None):
     """Constructor.
 
-    Sets the properties `cluster_spec`, `is_chief`, `master` (if `None` in the
+    Sets the properties `cluster_spec`, `is_chief`, `main` (if `None` in the
     args), `num_ps_replicas`, `task_id`, and `task_type` based on the
     `TF_CONFIG` environment variable, if the pertinent information is
     present. The `TF_CONFIG` environment variable is a JSON object with
@@ -71,7 +71,7 @@ class ClusterConfig(object):
     * `task_type` is set to `TF_CONFIG['task']['type']`. Defaults to `None`.
     * `task_id` is set to `TF_CONFIG['task']['index']`. Defaults to 0.
     * `cluster_spec` is parsed from `TF_CONFIG['cluster']`. Defaults to {}.
-    * `master` is determined by looking up `task_type` and `task_id` in the
+    * `main` is determined by looking up `task_type` and `task_id` in the
       `cluster_spec`. Defaults to ''.
     * `num_ps_replicas` is set by counting the number of nodes listed
       in the `ps` attribute of `cluster_spec`. Defaults to 0.
@@ -86,7 +86,7 @@ class ClusterConfig(object):
           {'cluster': cluster,
            'task_id': {'type': 'worker', 'index': 1}}})
       config = ClusterConfig()
-      assert config.master == 'host4:2222'
+      assert config.main == 'host4:2222'
       assert config.task_id == 1
       assert config.num_ps_replicas == 2
       assert config.cluster_spec == server_lib.ClusterSpec(cluster)
@@ -95,8 +95,8 @@ class ClusterConfig(object):
     ```
 
     Args:
-      master: TensorFlow master. Defaults to empty string for local.
-      evaluation_master: The master on which to perform evaluation.
+      main: TensorFlow main. Defaults to empty string for local.
+      evaluation_main: The main on which to perform evaluation.
     """
     # If not explicitly specified in the constructor and the TF_CONFIG
     # environment variable is present, load cluster_spec from TF_CONFIG.
@@ -109,8 +109,8 @@ class ClusterConfig(object):
     self._task_id = self.get_task_id()
 
     self._cluster_spec = ClusterSpec(config.get('cluster', {}))
-    self._master = (master if master is not None else
-                    _get_master(self._cluster_spec, self._task_type,
+    self._main = (main if main is not None else
+                    _get_main(self._cluster_spec, self._task_type,
                                 self._task_id) or '')
     self._num_ps_replicas = _count_ps(self._cluster_spec) or 0
 
@@ -121,7 +121,7 @@ class ClusterConfig(object):
       self._is_chief = (self._task_id == 0)
     elif self._environment == Environment.CLOUD:
       # When the TF_CONFIG environment variable is set, we can set the
-      # default of is_chief to 0 when task_type is "master" and task_id is 0.
+      # default of is_chief to 0 when task_type is "main" and task_id is 0.
       self._is_chief = (self._task_type == TaskType.MASTER and
                         self._task_id == 0)
     else:
@@ -129,7 +129,7 @@ class ClusterConfig(object):
       self._is_chief = (self._task_type == TaskType.WORKER and
                         self._task_id == 0)
 
-    self._evaluation_master = evaluation_master or ''
+    self._evaluation_main = evaluation_main or ''
 
   @property
   def cluster_spec(self):
@@ -140,16 +140,16 @@ class ClusterConfig(object):
     return self._environment
 
   @property
-  def evaluation_master(self):
-    return self._evaluation_master
+  def evaluation_main(self):
+    return self._evaluation_main
 
   @property
   def is_chief(self):
     return self._is_chief
 
   @property
-  def master(self):
-    return self._master
+  def main(self):
+    return self._main
 
   @property
   def num_ps_replicas(self):
@@ -190,7 +190,7 @@ class RunConfig(ClusterConfig):
   """
 
   def __init__(self,
-               master=None,
+               main=None,
                num_cores=0,
                log_device_placement=False,
                gpu_memory_fraction=1,
@@ -200,16 +200,16 @@ class RunConfig(ClusterConfig):
                save_checkpoints_steps=None,
                keep_checkpoint_max=5,
                keep_checkpoint_every_n_hours=10000,
-               evaluation_master=''):
+               evaluation_main=''):
     """Constructor.
 
     Note that the superclass `ClusterConfig` may set properties like
-    `cluster_spec`, `is_chief`, `master` (if `None` in the args),
+    `cluster_spec`, `is_chief`, `main` (if `None` in the args),
     `num_ps_replicas`, `task_id`, and `task_type` based on the `TF_CONFIG`
     environment variable. See `ClusterConfig` for more details.
 
     Args:
-      master: TensorFlow master. Defaults to empty string for local.
+      main: TensorFlow main. Defaults to empty string for local.
       num_cores: Number of cores to be used. If 0, the system picks an
         appropriate number (default: 0).
       log_device_placement: Log the op placement to devices (default: False).
@@ -229,10 +229,10 @@ class RunConfig(ClusterConfig):
       keep_checkpoint_every_n_hours: Number of hours between each checkpoint
         to be saved. The default value of 10,000 hours effectively disables
         the feature.
-      evaluation_master: the master on which to perform evaluation.
+      evaluation_main: the main on which to perform evaluation.
     """
     super(RunConfig, self).__init__(
-        master=master, evaluation_master=evaluation_master)
+        main=main, evaluation_main=evaluation_main)
 
     gpu_options = GPUOptions(
         per_process_gpu_memory_fraction=gpu_memory_fraction)
@@ -258,8 +258,8 @@ def _count_ps(cluster_spec):
   return len(cluster_spec.as_dict().get('ps', [])) if cluster_spec else 0
 
 
-def _get_master(cluster_spec, task_type, task_id):
-  """Returns the appropriate string for the TensorFlow master."""
+def _get_main(cluster_spec, task_type, task_id):
+  """Returns the appropriate string for the TensorFlow main."""
   if not cluster_spec:
     return ''
 
@@ -268,7 +268,7 @@ def _get_master(cluster_spec, task_type, task_id):
   if len(jobs) == 1 and len(cluster_spec.job_tasks(jobs[0])) == 1:
     return ''
 
-  # Lookup the master in cluster_spec using task_type and task_id,
+  # Lookup the main in cluster_spec using task_type and task_id,
   # if possible.
   if task_type:
     if task_type not in jobs:

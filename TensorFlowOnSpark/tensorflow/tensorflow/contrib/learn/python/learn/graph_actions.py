@@ -125,7 +125,7 @@ def _monitored_train(graph,
                      init_fn=None,
                      log_every_steps=10,
                      supervisor_is_chief=True,
-                     supervisor_master='',
+                     supervisor_main='',
                      supervisor_save_model_secs=600,
                      supervisor_save_model_steps=None,
                      keep_checkpoint_max=5,
@@ -168,7 +168,7 @@ def _monitored_train(graph,
       current loss. A `0` or negative value disables logging.
     supervisor_is_chief: Whether the current process is the chief supervisor in
       charge of restoring the model and running standard services.
-    supervisor_master: The master string to use when preparing the session.
+    supervisor_main: The main string to use when preparing the session.
     supervisor_save_model_secs: Save checkpoints every this many seconds. Can
         not be specified with `supervisor_save_model_steps`.
     supervisor_save_model_steps: Save checkpoints every this many steps. Can not
@@ -263,12 +263,12 @@ def _monitored_train(graph,
     if not supervisor_is_chief:
       session_creator = monitored_session.WorkerSessionCreator(
           scaffold=scaffold,
-          master=supervisor_master)
+          main=supervisor_main)
     else:
       session_creator = monitored_session.ChiefSessionCreator(
           scaffold=scaffold,
           checkpoint_dir=output_dir,
-          master=supervisor_master)
+          main=supervisor_main)
       summary_writer = summary_io.SummaryWriterCache.get(output_dir)
       all_hooks.append(
           basic_session_run_hooks.StepCounterHook(
@@ -314,7 +314,7 @@ def train(graph,
           init_fn=None,
           log_every_steps=10,
           supervisor_is_chief=True,
-          supervisor_master='',
+          supervisor_main='',
           supervisor_save_model_secs=600,
           keep_checkpoint_max=5,
           supervisor_save_summaries_steps=100,
@@ -355,7 +355,7 @@ def train(graph,
       current loss.
     supervisor_is_chief: Whether the current process is the chief supervisor in
       charge of restoring the model and running standard services.
-    supervisor_master: The master string to use when preparing the session.
+    supervisor_main: The main string to use when preparing the session.
     supervisor_save_model_secs: Save a checkpoint every
       `supervisor_save_model_secs` seconds when training.
     keep_checkpoint_max: The maximum number of recent checkpoint files to
@@ -399,7 +399,7 @@ def train(graph,
                              init_fn,
                              log_every_steps,
                              supervisor_is_chief,
-                             supervisor_master,
+                             supervisor_main,
                              supervisor_save_model_secs,
                              keep_checkpoint_max,
                              supervisor_save_summaries_steps,
@@ -423,7 +423,7 @@ def _train_internal(graph,
                     init_fn,
                     log_every_steps,
                     supervisor_is_chief,
-                    supervisor_master,
+                    supervisor_main,
                     supervisor_save_model_secs,
                     keep_checkpoint_max,
                     supervisor_save_summaries_steps,
@@ -489,7 +489,7 @@ def _train_internal(graph,
       summary_writer=summary_writer,
       save_model_secs=supervisor_save_model_secs,
       init_fn=init_fn)
-  session = supervisor.PrepareSession(master=supervisor_master,
+  session = supervisor.PrepareSession(main=supervisor_main,
                                       start_standard_services=True)
   supervisor.StartQueueRunners(session)
 
@@ -655,7 +655,7 @@ def evaluate(graph,
              eval_dict,
              update_op=None,
              global_step_tensor=None,
-             supervisor_master='',
+             supervisor_main='',
              log_every_steps=10,
              feed_fn=None,
              max_steps=None):
@@ -687,7 +687,7 @@ def evaluate(graph,
     global_step_tensor: A `Variable` containing the global step. If `None`,
       one is extracted from the graph using the same logic as in `Supervisor`.
       Used to place eval summaries on training curves.
-    supervisor_master: The master string to use when preparing the session.
+    supervisor_main: The main string to use when preparing the session.
     log_every_steps: Integer. Output logs every `log_every_steps` evaluation
       steps. The logs contain the `eval_dict` and timing information.
     feed_fn: A function that is called every iteration to produce a `feed_dict`
@@ -719,7 +719,7 @@ def evaluate(graph,
         local_init_op=local_init_op,
         ready_op=ready_op)
     session, initialized = session_manager.recover_session(
-        master=supervisor_master,
+        main=supervisor_main,
         saver=saver,
         checkpoint_dir=checkpoint_path)
 

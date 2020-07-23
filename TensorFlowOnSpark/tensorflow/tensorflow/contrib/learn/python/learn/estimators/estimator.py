@@ -721,7 +721,7 @@ class BaseEstimator(
           init_fn=init_fn,
           log_every_steps=log_every_steps,
           supervisor_is_chief=self.config.is_chief,
-          supervisor_master=self._config.master,
+          supervisor_main=self._config.main,
           supervisor_save_model_secs=self._config.save_checkpoints_secs,
           supervisor_save_model_steps=self._config.save_checkpoints_steps,
           supervisor_save_summaries_steps=self._config.save_summary_steps,
@@ -804,7 +804,7 @@ class BaseEstimator(
           eval_dict=eval_dict,
           update_op=update_op,
           global_step_tensor=global_step,
-          supervisor_master=self._config.evaluation_master,
+          supervisor_main=self._config.evaluation_main,
           feed_fn=feed_fn,
           max_steps=steps)
 

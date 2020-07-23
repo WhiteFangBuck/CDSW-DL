@@ -216,7 +216,7 @@ class Scaffold(object):
                                   data_flow_ops.initialize_all_tables())
 
 
-def MonitoredTrainingSession(master='',  # pylint: disable=invalid-name
+def MonitoredTrainingSession(main='',  # pylint: disable=invalid-name
                              is_chief=True,
                              checkpoint_dir=None,
                              scaffold=None,
@@ -234,7 +234,7 @@ def MonitoredTrainingSession(master='',  # pylint: disable=invalid-name
 
 
   Args:
-    master: `String` the TensorFlow master to use.
+    main: `String` the TensorFlow main to use.
     is_chief: If `True`, it will take care of initialization and recovery the
       underlying TensorFlow session. If `False`, it will wait on a chief to
       initialize or recover the TensorFlow session.
@@ -262,7 +262,7 @@ def MonitoredTrainingSession(master='',  # pylint: disable=invalid-name
   scaffold = scaffold or Scaffold()
   if not is_chief:
     session_creator = WorkerSessionCreator(
-        scaffold=scaffold, master=master, config=config)
+        scaffold=scaffold, main=main, config=config)
     return MonitoredSession(session_creator=session_creator, hooks=hooks)
 
   if chief_only_hooks:
@@ -270,7 +270,7 @@ def MonitoredTrainingSession(master='',  # pylint: disable=invalid-name
   session_creator = ChiefSessionCreator(
       scaffold=scaffold,
       checkpoint_dir=checkpoint_dir,
-      master=master,
+      main=main,
       config=config)
 
   if checkpoint_dir:
@@ -301,14 +301,14 @@ class SessionCreator(object):
 class ChiefSessionCreator(SessionCreator):
   """Creates a tf.Session  for a chief."""
 
-  def __init__(self, scaffold=None, master='', config=None,
+  def __init__(self, scaffold=None, main='', config=None,
                checkpoint_dir=None):
     """Initializes a chief session creator.
 
     Args:
       scaffold: A `Scaffold` used for gathering or building supportive ops. If
         not specified a default one is created. It's used to finalize the graph.
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       config: `ConfigProto` proto used to configure the session.
       checkpoint_dir: A string.  Optional path to a directory where to restore
         variables.
@@ -316,7 +316,7 @@ class ChiefSessionCreator(SessionCreator):
     self._checkpoint_dir = checkpoint_dir
     self._scaffold = scaffold or Scaffold()
     self._session_manager = None
-    self._master = master
+    self._main = main
     self._config = config
 
   def _get_session_manager(self):
@@ -332,7 +332,7 @@ class ChiefSessionCreator(SessionCreator):
   def create_session(self):
     self._scaffold.finalize()
     return self._get_session_manager().prepare_session(
-        self._master,
+        self._main,
         saver=self._scaffold.saver,
         checkpoint_dir=self._checkpoint_dir,
         config=self._config,
@@ -344,18 +344,18 @@ class ChiefSessionCreator(SessionCreator):
 class WorkerSessionCreator(SessionCreator):
   """Creates a tf.Session for a worker."""
 
-  def __init__(self, scaffold=None, master='', config=None):
+  def __init__(self, scaffold=None, main='', config=None):
     """Initializes a worker session creator.
 
     Args:
       scaffold: A `Scaffold` used for gathering or building supportive ops. If
         not specified a default one is created. It's used to finalize the graph.
-      master: `String` representation of the TensorFlow master to use.
+      main: `String` representation of the TensorFlow main to use.
       config: `ConfigProto` proto used to configure the session.
     """
     self._scaffold = scaffold or Scaffold()
     self._session_manager = None
-    self._master = master
+    self._main = main
     self._config = config
 
   def _get_session_manager(self):
@@ -371,7 +371,7 @@ class WorkerSessionCreator(SessionCreator):
   def create_session(self):
     self._scaffold.finalize()
     return self._get_session_manager().wait_for_session(
-        self._master, config=self._config)
+        self._main, config=self._config)
 
 
 class MonitoredSession(object):
@@ -418,12 +418,12 @@ class MonitoredSession(object):
   * In most cases you can set session arguments as follows:
     ```python
     MonitoredSession(
-      session_creator=ChiefSessionCreator(master=..., config=...))
+      session_creator=ChiefSessionCreator(main=..., config=...))
     ```
   * In distributed setting for a non-chief worker, you can use following:
     ```python
     MonitoredSession(
-      session_creator=WorkerSessionCreator(master=..., config=...))
+      session_creator=WorkerSessionCreator(main=..., config=...))
     ```
   See `MonitoredTrainingSession` for an example usage based on chief or worker.
   """

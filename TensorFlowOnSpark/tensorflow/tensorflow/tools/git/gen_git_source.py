@@ -39,8 +39,8 @@ def parse_branch_ref(filename):
 
   In particular, if git is in detached head state, this will
   return None. If git is in attached head, it will return
-  the branch reference. E.g. if on 'master', the HEAD will
-  contain 'ref: refs/heads/master' so 'refs/heads/master'
+  the branch reference. E.g. if on 'main', the HEAD will
+  contain 'ref: refs/heads/main' so 'refs/heads/main'
   will be returned.
 
   Example: parse_branch_ref(".git/HEAD")

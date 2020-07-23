@@ -233,7 +233,7 @@ def create_train_op(total_loss,
 def train(
     train_op,
     logdir,
-    master='',
+    main='',
     is_chief=True,
     scaffold=None,
     hooks=None,
@@ -247,7 +247,7 @@ def train(
     train_op: A `Tensor` that, when executed, will apply the gradients and
       return the loss value.
     logdir: The directory where the graph and checkpoints are saved.
-    master: The URL of the master.
+    main: The URL of the main.
     is_chief: Specifies whether or not the training is being run by the primary
       replica during replica training.
     scaffold: An tf.train.Scaffold instance.
@@ -280,7 +280,7 @@ def train(
     session_creator = monitored_session.ChiefSessionCreator(
         scaffold=scaffold,
         checkpoint_dir=logdir,
-        master=master,
+        main=main,
         config=config)
 
     if chief_only_hooks:
@@ -306,7 +306,7 @@ def train(
           logdir, save_secs=save_checkpoint_secs, scaffold=scaffold))
   else:
     session_creator = monitored_session.WorkerSessionCreator(
-        scaffold=scaffold, master=master, config=config)
+        scaffold=scaffold, main=main, config=config)
 
   with monitored_session.MonitoredSession(
       session_creator=session_creator, hooks=hooks) as session:

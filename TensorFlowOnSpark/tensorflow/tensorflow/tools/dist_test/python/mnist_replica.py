@@ -21,8 +21,8 @@ ops are defined on a worker node. The TF sessions also run on the worker
 node.
 Multiple invocations of this script can be done in parallel, with different
 values for --task_index. There should be exactly one invocation with
---task_index, which will create a master session that carries out variable
-initialization. The other, non-master, sessions will wait for the master
+--task_index, which will create a main session that carries out variable
+initialization. The other, non-main, sessions will wait for the main
 session to finish the initialization before proceeding to the training stage.
 
 The coordination between the multiple worker invocations occurs due to
@@ -54,7 +54,7 @@ flags.DEFINE_boolean("download_only", False,
                      "session preparation, model definition or training")
 flags.DEFINE_integer("task_index", None,
                      "Worker task index, should be >= 0. task_index=0 is "
-                     "the master worker task the performs the variable "
+                     "the main worker task the performs the variable "
                      "initialization ")
 flags.DEFINE_integer("num_gpus", 1,
                      "Total number of gpus for each machine."

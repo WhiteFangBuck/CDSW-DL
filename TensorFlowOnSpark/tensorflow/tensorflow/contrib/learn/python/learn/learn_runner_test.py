@@ -111,7 +111,7 @@ class MainTest(tf.test.TestCase):
         learn_runner.run(lambda output_dir: TestExperiment(config=config),
                          output_dir="/tmp"))
 
-  def test_schedule_from_tf_config_runs_train_and_evaluate_on_master(self):
+  def test_schedule_from_tf_config_runs_train_and_evaluate_on_main(self):
     tf_config = {
         "cluster": build_distributed_cluster_spec(),
         "task": {

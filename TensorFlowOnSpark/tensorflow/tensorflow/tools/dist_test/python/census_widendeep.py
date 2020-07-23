@@ -39,8 +39,8 @@ flags.DEFINE_string("model_dir", "/tmp/census_wide_and_deep_model",
 flags.DEFINE_string("output_dir", "", "Base output directory.")
 flags.DEFINE_string("schedule", "local_run",
                     "Schedule to run for this experiment.")
-flags.DEFINE_string("master_grpc_url", "",
-                    "URL to master GRPC tensorflow server, e.g.,"
+flags.DEFINE_string("main_grpc_url", "",
+                    "URL to main GRPC tensorflow server, e.g.,"
                     "grpc://127.0.0.1:2222")
 flags.DEFINE_integer("num_parameter_servers", 0,
                      "Number of parameter servers")
@@ -250,7 +250,7 @@ def _create_experiment_fn(output_dir):  # pylint: disable=unused-argument
           "index": FLAGS.worker_index
       }
   })
-  config = run_config.RunConfig(master=FLAGS.master_grpc_url)
+  config = run_config.RunConfig(main=FLAGS.main_grpc_url)
 
   estimator = tf.contrib.learn.DNNLinearCombinedClassifier(
       model_dir=FLAGS.model_dir,

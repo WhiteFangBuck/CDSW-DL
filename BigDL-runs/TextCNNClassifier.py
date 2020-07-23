@@ -5,7 +5,7 @@ from operator import add
 from pyspark.sql import SparkSession
 
 spark = SparkSession.builder\
-  .master("yarn")\
+  .main("yarn")\
   .appName("TextClassifier")\
   .getOrCreate()
 

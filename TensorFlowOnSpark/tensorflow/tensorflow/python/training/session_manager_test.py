@@ -144,7 +144,7 @@ class SessionManagerTest(tf.test.TestCase):
 
       # Set max_wait_secs to allow us to try a few times.
       with self.assertRaises(errors.DeadlineExceededError):
-        sm.wait_for_session(master="", max_wait_secs=3)
+        sm.wait_for_session(main="", max_wait_secs=3)
 
   def testInitWithNoneLocalInitOpError(self):
     # Creating a SessionManager with a None local_init_op but
@@ -606,7 +606,7 @@ class ObsoleteSessionManagerTest(tf.test.TestCase):
 
       # Set max_wait_secs to allow us to try a few times.
       with self.assertRaises(errors.DeadlineExceededError):
-        sm.wait_for_session(master="", max_wait_secs=3)
+        sm.wait_for_session(main="", max_wait_secs=3)
 
 
 if __name__ == "__main__":

@@ -30,13 +30,13 @@ class RunConfigTest(tf.test.TestCase):
 
   def test_defaults_with_no_tf_config(self):
     config = run_config.RunConfig()
-    self.assertEquals(config.master, "")
+    self.assertEquals(config.main, "")
     self.assertEquals(config.task_id, 0)
     self.assertEquals(config.num_ps_replicas, 0)
     self.assertEquals(config.cluster_spec, {})
     self.assertIsNone(config.task_type)
     self.assertTrue(config.is_chief)
-    self.assertEquals(config.evaluation_master, "")
+    self.assertEquals(config.evaluation_main, "")
 
   def test_values_from_tf_config(self):
     tf_config = {
@@ -53,13 +53,13 @@ class RunConfigTest(tf.test.TestCase):
     with patch.dict("os.environ", {"TF_CONFIG": json.dumps(tf_config)}):
       config = run_config.RunConfig()
 
-    self.assertEquals(config.master, "grpc://host4:4")
+    self.assertEquals(config.main, "grpc://host4:4")
     self.assertEquals(config.task_id, 1)
     self.assertEquals(config.num_ps_replicas, 2)
     self.assertEquals(config.cluster_spec.as_dict(), tf_config["cluster"])
     self.assertEquals(config.task_type, tf.contrib.learn.TaskType.WORKER)
     self.assertFalse(config.is_chief)
-    self.assertEquals(config.evaluation_master, "")
+    self.assertEquals(config.evaluation_main, "")
 
   def test_explicitly_specified_values(self):
     cluster_spec = {
@@ -75,23 +75,23 @@ class RunConfigTest(tf.test.TestCase):
     }
     with patch.dict("os.environ", {"TF_CONFIG": json.dumps(tf_config)}):
       config = run_config.RunConfig(
-          master="localhost:0", evaluation_master="localhost:9991")
+          main="localhost:0", evaluation_main="localhost:9991")
 
-    self.assertEquals(config.master, "localhost:0")
+    self.assertEquals(config.main, "localhost:0")
     self.assertEquals(config.task_id, 2)
     self.assertEquals(config.num_ps_replicas, 1)
     self.assertEquals(config.cluster_spec, tf.train.ClusterSpec(cluster_spec))
     self.assertEquals(config.task_type, tf.contrib.learn.TaskType.WORKER)
     self.assertFalse(config.is_chief)
-    self.assertEquals(config.evaluation_master, "localhost:9991")
+    self.assertEquals(config.evaluation_main, "localhost:9991")
 
-  def test_single_node_in_cluster_spec_produces_empty_master(self):
+  def test_single_node_in_cluster_spec_produces_empty_main(self):
     tf_config = {"cluster": {tf.contrib.learn.TaskType.WORKER: ["host1:1"]}}
     with patch.dict("os.environ", {"TF_CONFIG": json.dumps(tf_config)}):
       config = run_config.RunConfig()
-      self.assertEquals(config.master, "")
+      self.assertEquals(config.main, "")
 
-  def test_no_task_type_produces_empty_master(self):
+  def test_no_task_type_produces_empty_main(self):
     tf_config = {
         "cluster": {
             tf.contrib.learn.TaskType.PS: ["host1:1", "host2:2"],
@@ -102,7 +102,7 @@ class RunConfigTest(tf.test.TestCase):
     }
     with patch.dict("os.environ", {"TF_CONFIG": json.dumps(tf_config)}):
       config = run_config.RunConfig()
-      self.assertEquals(config.master, "")
+      self.assertEquals(config.main, "")
 
   def test_invalid_job_name_raises(self):
     tf_config = {
@@ -142,9 +142,9 @@ class RunConfigTest(tf.test.TestCase):
       run_config.RunConfig()
 
   def test_is_chief_from_cloud_tf_config(self):
-    # is_chief should be true when ["task"]["type"] == "master" and
+    # is_chief should be true when ["task"]["type"] == "main" and
     # index == 0 and ["task"]["environment"] == "cloud". Note that
-    # test_values_from_tf_config covers the non-master case.
+    # test_values_from_tf_config covers the non-main case.
     tf_config = {
         "cluster": {
             tf.contrib.learn.TaskType.PS: ["host1:1", "host2:2"],
@@ -186,7 +186,7 @@ class RunConfigTest(tf.test.TestCase):
 
     self.assertTrue(config.is_chief)
 
-    # But task 0 for a job named "master" should not be.
+    # But task 0 for a job named "main" should not be.
     tf_config = {
         "cluster": {
             tf.contrib.learn.TaskType.PS: ["host1:1", "host2:2"],

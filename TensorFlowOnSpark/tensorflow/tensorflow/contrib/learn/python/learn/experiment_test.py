@@ -156,7 +156,7 @@ class ExperimentTest(tf.test.TestCase):
     }
     with patch.dict('os.environ', {'TF_CONFIG': json.dumps(tf_config)}):
       config = tf.contrib.learn.RunConfig(
-          master='host4:2222', num_cores=15, gpu_memory_fraction=0.314)
+          main='host4:2222', num_cores=15, gpu_memory_fraction=0.314)
 
     est = TestEstimator(config)
     ex = tf.contrib.learn.Experiment(
@@ -187,7 +187,7 @@ class ExperimentTest(tf.test.TestCase):
 
   @tf.test.mock.patch('tensorflow.python.training.server_lib.Server')  # pylint: disable=line-too-long
   def test_train_server_does_not_start_without_cluster_spec(self, mock_server):
-    config = tf.contrib.learn.RunConfig(master='host4:2222')
+    config = tf.contrib.learn.RunConfig(main='host4:2222')
     ex = tf.contrib.learn.Experiment(
         TestEstimator(config),
         train_input_fn='train_input',
@@ -198,17 +198,17 @@ class ExperimentTest(tf.test.TestCase):
     self.assertFalse(mock_server.called)
 
   @tf.test.mock.patch('tensorflow.python.training.server_lib.Server')  # pylint: disable=line-too-long
-  def test_train_server_does_not_start_with_empty_master(self, mock_server):
+  def test_train_server_does_not_start_with_empty_main(self, mock_server):
     tf_config = {'cluster': self._cluster_spec()}
     with patch.dict('os.environ', {'TF_CONFIG': json.dumps(tf_config)}):
-      config = tf.contrib.learn.RunConfig(master='')
+      config = tf.contrib.learn.RunConfig(main='')
     ex = tf.contrib.learn.Experiment(
         TestEstimator(config),
         train_input_fn='train_input',
         eval_input_fn='eval_input')
     ex.train()
 
-    # The server should not have started because master was the empty string.
+    # The server should not have started because main was the empty string.
     self.assertFalse(mock_server.called)
 
   def test_train_raises_if_job_name_is_missing(self):
@@ -223,7 +223,7 @@ class ExperimentTest(tf.test.TestCase):
         'os.environ',
         {'TF_CONFIG': json.dumps(tf_config)}), self.assertRaises(ValueError):
       config = tf.contrib.learn.RunConfig(
-          master='host3:2222'  # Normally selected by task type.
+          main='host3:2222'  # Normally selected by task type.
       )
       ex = tf.contrib.learn.Experiment(
           TestEstimator(config),
@@ -333,7 +333,7 @@ class ExperimentTest(tf.test.TestCase):
     }
     with patch.dict('os.environ', {'TF_CONFIG': json.dumps(tf_config)}):
       config = tf.contrib.learn.RunConfig(
-          master='host2:2222',
+          main='host2:2222',
           num_cores=15,
           gpu_memory_fraction=0.314,)
     est = TestEstimator(config)
@@ -349,7 +349,7 @@ class ExperimentTest(tf.test.TestCase):
 
   @tf.test.mock.patch('tensorflow.python.training.server_lib.Server')  # pylint: disable=line-too-long
   def test_run_std_server_raises_without_cluster_spec(self, mock_server):
-    config = tf.contrib.learn.RunConfig(master='host4:2222')
+    config = tf.contrib.learn.RunConfig(main='host4:2222')
     with self.assertRaises(ValueError):
       ex = tf.contrib.learn.Experiment(
           TestEstimator(config),

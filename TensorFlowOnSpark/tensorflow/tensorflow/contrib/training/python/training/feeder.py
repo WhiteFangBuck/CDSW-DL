@@ -48,7 +48,7 @@ with tf.Graph().as_default():
       ['/job:consumer/replica:0', '/job:consumer/replica:1'])
   # ...or use the add_remote_replicas helper.
 
-  feeder.run_feeding_forever(lambda: tf.Session(FLAGS.master))
+  feeder.run_feeding_forever(lambda: tf.Session(FLAGS.main))
 ```
 
 For feeding in-process, a Feeder acts similarly to a Queue, with a

@@ -53,7 +53,7 @@ class Supervisor(object):
     # Create a Supervisor that will checkpoint the model in '/tmp/mydir'.
     sv = Supervisor(logdir='/tmp/mydir')
     # Get a TensorFlow session managed by the supervisor.
-    with sv.managed_session(FLAGS.master) as sess:
+    with sv.managed_session(FLAGS.main) as sess:
       # Use the session to train the graph.
       while not sv.should_stop():
         sess.run(<my_train_op>)
@@ -119,21 +119,21 @@ class Supervisor(object):
   NOTE: This modified program still works fine as a single program.
   The single program marks itself as the chief.
 
-  #### What `master` string to use
+  #### What `main` string to use
 
   Whether you are running on your machine or in the cluster you can use the
-  following values for the --master flag:
+  following values for the --main flag:
 
   * Specifying `''` requests an in-process session that does not use RPC.
 
   * Specifying `'local'` requests a session that uses the RPC-based
-    "Master interface" to run TensorFlow programs. See
+    "Main interface" to run TensorFlow programs. See
     [`tf.train.Server.create_local_server()`](#Server.create_local_server) for
     details.
 
   * Specifying `'grpc://hostname:port'` requests a session that uses
     the RPC interface to a specific , and also allows the in-process
-    master to access remote tensorflow workers. Often, it is
+    main to access remote tensorflow workers. Often, it is
     appropriate to pass `server.target` (for some `tf.train.Server`
     named `server).
 
@@ -151,7 +151,7 @@ class Supervisor(object):
     ```python
     ...
     sv = Supervisor(logdir='/tmp/mydir')
-    with sv.managed_session(FLAGS.master) as sess:
+    with sv.managed_session(FLAGS.main) as sess:
       sv.loop(60, print_loss, (sess))
       while not sv.should_stop():
         sess.run(my_train_op)
@@ -172,7 +172,7 @@ class Supervisor(object):
     sv = Supervisor(logdir='/tmp/mydir', is_chief=is_chief, summary_op=None)
     # As summary_op was None, managed_session() does not start the
     # summary thread.
-    with sv.managed_session(FLAGS.master) as sess:
+    with sv.managed_session(FLAGS.main) as sess:
       for step in xrange(1000000):
         if sv.should_stop():
           break
@@ -680,19 +680,19 @@ class Supervisor(object):
       t.start()
     return threads
 
-  def prepare_or_wait_for_session(self, master="", config=None,
+  def prepare_or_wait_for_session(self, main="", config=None,
                                   wait_for_checkpoint=False,
                                   max_wait_secs=7200,
                                   start_standard_services=True):
     """Make sure the model is ready to be used.
 
-    Create a session on 'master', recovering or initializing the model as
+    Create a session on 'main', recovering or initializing the model as
     needed, or wait for a session to be ready.  If running as the chief
     and `start_standard_service` is set to True, also call the session
     manager to start the standard services.
 
     Args:
-      master: name of the TensorFlow master to use.  See the `tf.Session`
+      main: name of the TensorFlow main to use.  See the `tf.Session`
         constructor for how this is interpreted.
       config: Optional ConfigProto proto used to configure the session,
         which is passed as-is to create the session.
@@ -714,7 +714,7 @@ class Supervisor(object):
 
     if self._is_chief:
       sess = self._session_manager.prepare_session(
-          master, init_op=self.init_op, saver=self.saver,
+          main, init_op=self.init_op, saver=self.saver,
           checkpoint_dir=self._logdir, wait_for_checkpoint=wait_for_checkpoint,
           max_wait_secs=max_wait_secs, config=config,
           init_feed_dict=self._init_feed_dict, init_fn=self._init_fn)
@@ -722,7 +722,7 @@ class Supervisor(object):
       if start_standard_services:
         self.start_standard_services(sess)
     else:
-      sess = self._session_manager.wait_for_session(master,
+      sess = self._session_manager.wait_for_session(main,
                                                     config=config,
                                                     max_wait_secs=max_wait_secs)
     if start_standard_services:
@@ -896,7 +896,7 @@ class Supervisor(object):
 
   # pylint: disable=g-doc-return-or-yield,broad-except
   @contextlib.contextmanager
-  def managed_session(self, master="", config=None,
+  def managed_session(self, main="", config=None,
                       start_standard_services=True,
                       close_summary_writer=True):
     """Returns a context manager for a managed session.
@@ -911,7 +911,7 @@ class Supervisor(object):
     ```python
     def train():
       sv = tf.train.Supervisor(...)
-      with sv.managed_session(<master>) as sess:
+      with sv.managed_session(<main>) as sess:
         for step in xrange(..):
           if sv.should_stop():
             break
@@ -943,7 +943,7 @@ class Supervisor(object):
     the training loop and are considered normal termination.
 
     Args:
-      master: name of the TensorFlow master to use.  See the `tf.Session`
+      main: name of the TensorFlow main to use.  See the `tf.Session`
         constructor for how this is interpreted.
       config: Optional `ConfigProto` proto used to configure the session.
         Passed as-is to create the session.
@@ -959,7 +959,7 @@ class Supervisor(object):
     """
     try:
       sess = self.prepare_or_wait_for_session(
-          master=master, config=config,
+          main=main, config=config,
           start_standard_services=start_standard_services)
       yield sess
     except Exception as e:

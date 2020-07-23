@@ -195,7 +195,7 @@ class Experiment(object):
     config = self._estimator.config
     if (config.environment != run_config.Environment.LOCAL and
         config.environment != run_config.Environment.GOOGLE and
-        config.cluster_spec and config.master):
+        config.cluster_spec and config.main):
       self._start_server()
 
     extra_hooks = []
@@ -338,7 +338,7 @@ class Experiment(object):
     available at that point). Thus, settings `min_eval_frequency` to 1 means
     that the model will be evaluated everytime there is a new checkpoint.
 
-    This is particular useful for a "Master" task in the cloud, whose
+    This is particular useful for a "Main" task in the cloud, whose
     responsibility it is to take checkpoints, evaluate those checkpoints,
     and write out summaries. Participating in training as the supervisor
     allows such a task to accomplish the first and last items, while
@@ -402,10 +402,10 @@ class Experiment(object):
   def _start_server(self):
     """Creates, starts, and returns a server_lib.Server."""
     config = self._estimator.config
-    if (not config.cluster_spec or not config.task_type or not config.master or
+    if (not config.cluster_spec or not config.task_type or not config.main or
         config.task_id is None):
       raise ValueError("Could not start server; be sure to specify "
-                       "cluster_spec, task_type, master, and task in "
+                       "cluster_spec, task_type, main, and task in "
                        "RunConfig or set the TF_CONFIG environment variable.")
     server = server_lib.Server(
         config.cluster_spec,

@@ -576,7 +576,7 @@ def train(train_op,
           train_step_kwargs=_USE_DEFAULT,
           log_every_n_steps=1,
           graph=None,
-          master='',
+          main='',
           is_chief=True,
           global_step=None,
           number_of_steps=None,
@@ -614,7 +614,7 @@ def train(train_op,
       and global step and logged.
     graph: The graph to pass to the supervisor. If no graph is supplied the
       default graph is used.
-    master: The address of the tensorflow master.
+    main: The address of the tensorflow main.
     is_chief: Specifies whether or not the training is being run by the primary
       replica during replica training.
     global_step: The `Tensor` representing the global step. If left as `None`,
@@ -763,7 +763,7 @@ def train(train_op,
     try:
       should_retry = False
       with sv.managed_session(
-          master, start_standard_services=False, config=session_config) as sess:
+          main, start_standard_services=False, config=session_config) as sess:
         logging.info('Starting Session.')
         if is_chief:
           if logdir:

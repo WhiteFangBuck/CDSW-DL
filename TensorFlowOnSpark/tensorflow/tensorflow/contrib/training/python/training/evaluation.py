@@ -362,7 +362,7 @@ def _scaffold_with_init(scaffold, saver, checkpoint_path):
 
 def evaluate_once(
     checkpoint_path,
-    master='',
+    main='',
     scaffold=None,
     eval_ops=None,
     feed_dict=None,
@@ -395,7 +395,7 @@ def evaluate_once(
 
   Args:
     checkpoint_path: The path to a checkpoint to use for evaluation.
-    master: The BNS address of the TensorFlow master.
+    main: The BNS address of the TensorFlow main.
     scaffold: An tf.train.Scaffold instance for initializing variables and
       restoring variables. Note that `scaffold.init_fn` is used by the function
       to restore the checkpoint. If you supply a custom init_fn, then it must
@@ -442,7 +442,7 @@ def evaluate_once(
   session_creator = monitored_session.ChiefSessionCreator(
       scaffold=scaffold,
       checkpoint_dir=None,
-      master=master,
+      main=main,
       config=config)
 
   # Prepare the run hooks.
@@ -464,7 +464,7 @@ def evaluate_once(
 
 def evaluate_repeatedly(
     checkpoint_dir,
-    master='',
+    main='',
     scaffold=None,
     eval_ops=None,
     feed_dict=None,
@@ -500,7 +500,7 @@ def evaluate_repeatedly(
 
   Args:
     checkpoint_dir: The directory where checkpoints are stored.
-    master: The BNS address of the TensorFlow master.
+    main: The BNS address of the TensorFlow main.
     scaffold: An tf.train.Scaffold instance for initializing variables and
       restoring variables. Note that `scaffold.init_fn` is used by the function
       to restore the checkpoint. If you supply a custom init_fn, then it must
@@ -556,7 +556,7 @@ def evaluate_repeatedly(
     session_creator = monitored_session.ChiefSessionCreator(
         scaffold=_scaffold_with_init(scaffold, saver, checkpoint_path),
         checkpoint_dir=None,
-        master=master,
+        main=main,
         config=config)
 
     with monitored_session.MonitoredSession(

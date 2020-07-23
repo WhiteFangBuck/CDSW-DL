@@ -21,7 +21,7 @@ from tensorflow.python.framework import errors
 
 
 def basic_train_loop(supervisor, train_step_fn, args=None,
-                     kwargs=None, master=""):
+                     kwargs=None, main=""):
   """Basic loop to train a model.
 
   Calls `train_step_fn` in a loop to train a model.  The function is called as:
@@ -39,7 +39,7 @@ def basic_train_loop(supervisor, train_step_fn, args=None,
       repeatedly as `train_step_fn(session, *args **kwargs)`.
     args: Optional positional arguments passed to `train_step_fn`.
     kwargs: Optional keyword arguments passed to `train_step_fn`.
-    master: Master to use to create the training session.  Defaults to
+    main: Main to use to create the training session.  Defaults to
       `""` which causes the session to be created in the local process.
   """
   if args is None:
@@ -50,7 +50,7 @@ def basic_train_loop(supervisor, train_step_fn, args=None,
   while should_retry:
     try:
       should_retry = False
-      with supervisor.managed_session(master) as sess:
+      with supervisor.managed_session(main) as sess:
         while not supervisor.should_stop():
           train_step_fn(sess, *args, **kwargs)
     except errors.AbortedError:
